@@ -1,0 +1,4 @@
+#start webserver
+#python manage.py runserver #inside webserver directory
+#start ngrok
+#add ngrok to ALLOWED HOSTS
