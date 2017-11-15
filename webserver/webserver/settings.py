@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +21,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'irguy^a%og4s07qj)dr%jkjpul_!ozxkj9_)aj1=s9hme6@_0b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['7aaf5e48.ngrok.io']
 
 
 # Application definition
@@ -121,3 +119,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 ACCESS_TOKEN = 'EAAJnVv7EN9wBAPtxZCvcznbUrNXU8nm6CQ5EKrVaS1cbR7LQXCvwKUpG2tlGDTGZCRGywOZAfJ24SxvOQtm4F2Uy5dhZCpU4nZAoJhSyfeBf5bBOXLU4kXUjMuZCYTmNsTH8Ea0bWmWHRlHa39J2ojzTqXWyvNZAdMisXMMgQyZBDE9RwLl9Ur3U'
+EXPERIMENTS_DIR = '/home/saulo/sscrowd-fb-exp'
+ALLOWED_HOSTS = ['b66350e1.ngrok.io']
+SECRET_KEY = 'irguy^a%og4s07qj)dr%jkjpul_!ozxkj9_)aj1=s9hme6@_0b'

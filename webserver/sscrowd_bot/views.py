@@ -11,7 +11,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
 
-from .utils import post_facebook_message
+from .utils import post_simple_message
+from .utils import post_quick_reply
+
+from .models import UserStatus
+
+import os
 
 class SSCrowdBotView(generic.View):
 
@@ -25,6 +30,22 @@ class SSCrowdBotView(generic.View):
     def dispatch(self, request, *args, **kwargs):
         return generic.View.dispatch(self, request, *args, **kwargs)
     
+    def save_userid(self,userid):
+        f = open('userids', 'w')
+        f.write(userid)
+        f.close()
+
+    #def send_welcome():
+        #write welcome message as a simple message
+
+    def parse_experiments_directory(self):
+ 
+        print settings.EXPERIMENTS_DIR
+
+    def send_poll(question,options):
+        post_simple_message(fbid,message)
+        post_quick_reply(fbid,"Your reply:",options)
+
     # Post function to handle Facebook messages
     def post(self, request, *args, **kwargs):
         # Converts the text payload into a python dictionary
@@ -37,6 +58,16 @@ class SSCrowdBotView(generic.View):
                 # This might be delivery, optin, postback for other events 
                 if 'message' in message:
                     # Print the message to the terminal
+
+                    user_status = UserStatus(message['sender']['id'])
+                    #self.parse_experiments_directory()
+
                     pprint(message)     
-                    post_facebook_message(message['sender']['id'],message['message']['text'])
+                    self.save_userid(message['sender']['id'])
+                    #post_facebook_message(message['sender']['id'],message['message']['text'])
+                    post_quick_reply(message['sender']['id'])
         return HttpResponse()
+
+
+
+ 

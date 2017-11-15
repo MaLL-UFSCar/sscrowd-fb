@@ -1,0 +1,13 @@
+#!/bin/bash
+
+option=$1
+root_dir=$2
+message=$3
+
+date=$(date +%Y-%m-%d\ %H:%M:%S)
+
+case $option in
+        -j) echo $date JAV:$message >> $root_dir/logs/script.log;;
+        -m) echo $date MSG:$message >> $root_dir/logs/script.log;;
+        -e) echo $date ERR:$message >> $root_dir/logs/error.log;;
+esac
