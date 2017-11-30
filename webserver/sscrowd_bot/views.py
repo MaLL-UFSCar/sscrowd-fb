@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import json
+import pymongo
 
 from django.shortcuts import render
 from pprint import pprint
@@ -14,9 +15,11 @@ from django.conf import settings
 from .utils import post_simple_message
 from .utils import post_quick_reply
 
-from .models import UserStatus
+from datetime import datetime, timedelta
+from pymongo import MongoClient
 
 import os
+
 
 class SSCrowdBotView(generic.View):
 
@@ -35,12 +38,29 @@ class SSCrowdBotView(generic.View):
         f.write(userid)
         f.close()
 
-    #def send_welcome():
-        #write welcome message as a simple message
+    def create_user(self,fbid):
+        conn = MongoClient('mongodb://localhost:27017')
 
-    def parse_experiments_directory(self):
- 
-        print settings.EXPERIMENTS_DIR
+        db_fbusers = conn['fbusers']
+        
+        today = datetime.today()
+
+        #the next interaction for a new user is 1 minute after its creation
+        next_interaction = today + timedelta(minutes=1)
+
+        #sets fbid to be unique
+        db_fbusers.users.create_index([('fbid',pymongo.ASCENDING)], unique=True)
+
+        #try to insert the new user
+        try:
+            db_fbusers.users.insert_one(
+                {
+                    'fbid':fbid, 
+                    'next_interaction':next_interaction.strftime("%Y%m%d%H%M%S")
+                },
+            )
+        except pymongo.errors.DuplicateKeyError:
+            pass
 
     def send_poll(question,options):
         post_simple_message(fbid,message)
@@ -48,26 +68,22 @@ class SSCrowdBotView(generic.View):
 
     # Post function to handle Facebook messages
     def post(self, request, *args, **kwargs):
+
         # Converts the text payload into a python dictionary
         incoming_message = json.loads(self.request.body.decode('utf-8'))
+
         # Facebook recommends going through every entry since they might send
         # multiple messages in a single call during high load
         for entry in incoming_message['entry']:
             for message in entry['messaging']:
+
                 # Check to make sure the received call is a message call
                 # This might be delivery, optin, postback for other events 
                 if 'message' in message:
-                    # Print the message to the terminal
 
-                    user_status = UserStatus(message['sender']['id'])
-                    #self.parse_experiments_directory()
-
-                    pprint(message)     
-                    self.save_userid(message['sender']['id'])
-                    #post_facebook_message(message['sender']['id'],message['message']['text'])
-                    post_quick_reply(message['sender']['id'])
+                    #save the fbid if this is first contact with user
+                    self.create_user(message['sender']['id'])
+                    pprint(message)  
+   
         return HttpResponse()
 
-
-
- 

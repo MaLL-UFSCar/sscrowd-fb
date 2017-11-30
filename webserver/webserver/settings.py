@@ -104,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Eastern'
 
 USE_I18N = True
 
@@ -120,5 +120,5 @@ STATIC_URL = '/static/'
 
 ACCESS_TOKEN = 'EAAJnVv7EN9wBAPtxZCvcznbUrNXU8nm6CQ5EKrVaS1cbR7LQXCvwKUpG2tlGDTGZCRGywOZAfJ24SxvOQtm4F2Uy5dhZCpU4nZAoJhSyfeBf5bBOXLU4kXUjMuZCYTmNsTH8Ea0bWmWHRlHa39J2ojzTqXWyvNZAdMisXMMgQyZBDE9RwLl9Ur3U'
 EXPERIMENTS_DIR = '/home/saulo/sscrowd-fb-exp'
-ALLOWED_HOSTS = ['b66350e1.ngrok.io']
+ALLOWED_HOSTS = ['074a7ba2.ngrok.io']
 SECRET_KEY = 'irguy^a%og4s07qj)dr%jkjpul_!ozxkj9_)aj1=s9hme6@_0b'
