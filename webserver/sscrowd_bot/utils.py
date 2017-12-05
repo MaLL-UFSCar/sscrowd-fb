@@ -27,30 +27,25 @@ def post_simple_message(fbid, message):
     else:
         return (False,response_msg)
 
-def post_quick_reply(fbid,schedule_id):
+def post_quick_reply(fbid,text,option_list,payload,identifier):
 
     post_message_url = 'https://graph.facebook.com/v2.6/me/messages?' \
                        'access_token={}'.format(ACCESS_TOKEN)
 
-
-    options = ssc_config.reply_options.split(',')
-
     reply_list = []
 
     #build the option list according to the list in the configuration file
-    for option in options:
-        reply_list.append({"content_type":"text","title":option,"payload":schedule_id}) 
-
+    for option in option_list:
+        reply_list.append({"content_type":"text","title":option,"payload":payload}) 
 
     response_msg = json.dumps({"recipient": {"id": fbid},
-                               "message": {"text": "Your answer:","quick_replies":reply_list},
-                               "schedule_id":schedule_id
+                               "message": {"text": text,"quick_replies":reply_list},
+                               "identifier":identifier
                               })
 
     status = requests.post(post_message_url,
                            headers={"Content-Type": "application/json"},
                            data=response_msg)
-
 
     print(status.json())
 
@@ -75,5 +70,3 @@ if __name__ == '__main__':
     
     if args.qr:
         post_quick_reply(args.fbid,args.message,args.questionid)
-
-    print args
