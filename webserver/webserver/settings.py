@@ -120,5 +120,5 @@ STATIC_URL = '/static/'
 
 ACCESS_TOKEN = 'EAAJnVv7EN9wBAPtxZCvcznbUrNXU8nm6CQ5EKrVaS1cbR7LQXCvwKUpG2tlGDTGZCRGywOZAfJ24SxvOQtm4F2Uy5dhZCpU4nZAoJhSyfeBf5bBOXLU4kXUjMuZCYTmNsTH8Ea0bWmWHRlHa39J2ojzTqXWyvNZAdMisXMMgQyZBDE9RwLl9Ur3U'
 EXPERIMENTS_DIR = '/home/saulo/sscrowd-fb-exp'
-ALLOWED_HOSTS = ['a1b613d3.ngrok.io']
+ALLOWED_HOSTS = ['fd0e5bc7.ngrok.io']
 SECRET_KEY = 'irguy^a%og4s07qj)dr%jkjpul_!ozxkj9_)aj1=s9hme6@_0b'
