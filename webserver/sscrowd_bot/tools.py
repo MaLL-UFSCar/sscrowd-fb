@@ -7,10 +7,12 @@ import json
 import pymongo
 import pprint
 import random
+import logging
 
 from datetime import datetime
 from utils import post_quick_reply
 from utils import post_simple_message
+from utils import post_greeting
 from sscrowdconfig import ConfigSSCrowdFB
 
 from datetime import datetime,timedelta
@@ -29,6 +31,8 @@ db_address = ssc_config.db_address
 conn = MongoClient(db_address)
 
 db_fbuser = conn['fbuser']
+
+logger = logging.getLogger(__name__)
 
 def build_experiment(exp_name,question_file):
 
@@ -50,7 +54,7 @@ def schedule(db_exp,question_file):
             try:
                 db_exp.schedule.insert_one({"question":question})
             except pymongo.errors.DuplicateKeyError:
-                pass
+                logger.error("failed attempt to duplicate question "+question)
             
 
 def create_user(fbid):
@@ -64,11 +68,12 @@ def create_user(fbid):
 	    {
 	        'fbid':fbid,
 	        'last_interaction':datetime.today(),
+                'next_interaction':7,
 	        'active':False
 	    },
         )
     except pymongo.errors.DuplicateKeyError:
-        pass
+        logger.error("failed attempt to duplicate fbid "+fbid)
 
 def unsubscribe(fbid):
 
@@ -91,6 +96,8 @@ def subscribe(fbid):
 def handle_message(message):
 
     pprint.pprint(message)
+
+    post_greeting()
 
     fbid = message['sender']['id']
 
@@ -191,7 +198,7 @@ def begin_questions(exp_name):
     for user in db_fbuser.user.find():
 
         #if it has passed enough time since the last user's interaction with the bot and the user is active
-        if datetime.today() > user['last_interaction'] + timedelta(days=0) and user['active']:
+        if datetime.today() > user['last_interaction'] + timedelta(days=user['next_interaction']) and user['active']:
             sts,msg = post_quick_reply(user['fbid'],text,option_list,'begin_question#'+exp_name,None)
 
             #update last interaction date
@@ -216,7 +223,7 @@ def ask_question(exp_name,fbid):
     if schedule is not None:
 
         #post question statement
-        sts1,msg1 = post_simple_message(fbid,schedule['question'])
+        sts1,msg1 = post_simple_message(fbid,schedule['question'].replace("*","\n"))
 
         #if the statement question worked
         if sts1:

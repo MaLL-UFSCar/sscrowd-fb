@@ -13,6 +13,7 @@ from django.utils.decorators import method_decorator
 from django.conf import settings
 
 from tools import handle_message
+from .utils import post_greeting
 
 class SSCrowdBotView(generic.View):
 
@@ -33,6 +34,7 @@ class SSCrowdBotView(generic.View):
         incoming_message = json.loads(self.request.body.decode('utf-8'))
 
         pprint(incoming_message)
+        post_greeting()
 
         # Facebook recommends going through every entry since they might send
         # multiple messages in a single call during high load

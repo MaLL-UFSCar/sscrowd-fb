@@ -98,6 +98,43 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+
+        'applogfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'sscrowd-fb.log'),
+            'maxBytes': 1024*1024*15, # 15MB
+            'backupCount': 10,
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'sscrowd-fb': {
+            'handlers': ['applogfile',],
+            'level': 'DEBUG',
+        },
+    },
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -120,5 +157,5 @@ STATIC_URL = '/static/'
 
 ACCESS_TOKEN = 'EAAJnVv7EN9wBAPtxZCvcznbUrNXU8nm6CQ5EKrVaS1cbR7LQXCvwKUpG2tlGDTGZCRGywOZAfJ24SxvOQtm4F2Uy5dhZCpU4nZAoJhSyfeBf5bBOXLU4kXUjMuZCYTmNsTH8Ea0bWmWHRlHa39J2ojzTqXWyvNZAdMisXMMgQyZBDE9RwLl9Ur3U'
 EXPERIMENTS_DIR = '/home/saulo/sscrowd-fb-exp'
-ALLOWED_HOSTS = ['fd0e5bc7.ngrok.io']
+ALLOWED_HOSTS = ['1d3bedda.ngrok.io']
 SECRET_KEY = 'irguy^a%og4s07qj)dr%jkjpul_!ozxkj9_)aj1=s9hme6@_0b'
